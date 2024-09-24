@@ -1,37 +1,80 @@
-"use client"
-import React, {useState} from "react";
-import {Button, Form} from 'react-bootstrap'
+"use client";
+import React, { useState, useEffect } from "react";
+import { Button, Form } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
-import {Link,useNavigate} from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
-function Edit({ setDadosTable, dadosTable }){
+function Edit({ setDadosTable, dadosTable }) {
 
     let history = useNavigate();
 
-    dadosTable.map((id) => (
-        const [updateUser, setupdateUser] = useState({
-            name: item.name,
-            age: item.age,
-            email: item.email,
-        });
-    ))
+    let { id } = useParams();
+    //pegar os dados de setupdateuser e salvar em updateuser
+    const [updateUser, setUpdateUser] = useState({
+        name: '',
+        age: '',
+        email: ''
+    });
 
-const EditUser = (updateUser) => {
-       if (updateUser.name && updateUser.age && updateUser.email) {
-            const newupdateuserWithId = {
-                //id: String(dadosTable.length + 1), // Gera um novo id baseado no comprimento do array
-                id:  Math.random().toString(36).substring(2),
-                name: updateUser.name,
-                age: updateUser.age,
-                email: updateUser.email
-            };
-            console.log(updateUser)
-            setDadosTable(dadosTable => [...dadosTable, newupdateuserWithId]);
-            //console.log(dadosTable);
-            history('/');
+    useEffect(()=>{const UsertoEdit = dadosTable.find(user => user.id === id); //recuperando dados do usuário por id
+    if (UsertoEdit) {
+        setUpdateUser({
+            id,
+            name: UsertoEdit.name,
+            age: UsertoEdit.age,
+            email: UsertoEdit.email,
+        })
+    } else {
+        alert('Usuário não encontrado');
+        history('/');
         }
-        else {
-            alert("Por favor, preencha todos os campos!");
-        } 
-    }
+    },[id,dadosTable, history]);
+
+    const EditUser = () => {
+        setDadosTable(dadosTable => {
+            return dadosTable.map(user => {
+                if (user.id === id) {
+                    return updateUser; // Substitui os dados do usuário a ser editado
+                } else {
+                    return user; // Mantém os outros usuários inalterados
+                }
+            });
+        });
+        //console.log(id);
+        history('/');
+        }
+    
+    return (
+        <div>
+            <Form>
+                <Form.Group>
+                    <Form.Control 
+                        placeholder="Nome" 
+                        name="name" 
+                        value={updateUser.name}
+                        onChange={e => setUpdateUser({...updateUser, name: e.target.value})}/*permite que o valor seja alterado*//>
+                         
+                </Form.Group>
+                <Form.Group>
+                    <Form.Control 
+                        placeholder="Idade" 
+                        name="age" 
+                        value={updateUser.age}
+                        onChange={e => setUpdateUser({...updateUser, age: e.target.value})}
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Control 
+                        placeholder="Email" 
+                        name="email" 
+                        value={updateUser.email}
+                        onChange={e => setUpdateUser({...updateUser, email: e.target.value})} 
+                    />
+                </Form.Group>
+                <Button onClick={EditUser}>Salvar</Button>
+            </Form>
+        </div>
+    );
 }
+
+export default Edit;

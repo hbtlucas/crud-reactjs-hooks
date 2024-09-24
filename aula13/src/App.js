@@ -2,6 +2,7 @@ import './App.css';
 import React, { useState } from 'react';
 import Home from './components/home';
 import Add from './components/add';
+import Edit from './components/edit';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import DadosTable from './components/dadostable';
 
@@ -13,7 +14,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home dadosTable={dadosTable} setDadosTable={setDadosTable} />} />
           <Route path='/create' element={<Add dadosTable={dadosTable} setDadosTable={setDadosTable} />} />
-          <Route path='/edit' element={<Edit dadosTable={dadosTable} setDadosTable={setDadosTable} />} />
+          <Route path='/edit/:id' element={<Edit dadosTable={dadosTable} setDadosTable={setDadosTable} />} />
         </Routes>
       </Router>
     </div>

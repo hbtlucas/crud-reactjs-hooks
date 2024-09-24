@@ -1,14 +1,10 @@
 import react, { Fragment, useState } from 'react';
 import {Button, Table} from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
-import DadosTable from './dadostable';
 import {Link,useNavigate} from 'react-router-dom';
 
 
 function Home({ dadosTable, setDadosTable }){
-
-    // Estado para armazenar os dados
-    //const [dadosTable, setDadosTable] = useState(DadosTable);
 
     //função pra deletar
     let history = useNavigate();
@@ -18,7 +14,6 @@ function Home({ dadosTable, setDadosTable }){
         setDadosTable(newTable);
         history('/'); 
     };
-
 
     return (
         <Fragment>
@@ -40,8 +35,10 @@ function Home({ dadosTable, setDadosTable }){
                                     <td>{item.age}</td>
                                     <td>{item.email || 'N/A'}</td>
                                     <td>
-                                        <Button onClick={() => alert(item.id)} variant="primary">Editar</Button>
-                                        <Button onClick={() => DeleteFunction(item.id)} variant="danger" style={{ marginLeft: "10px" }}>Excluir</Button>
+                                    <Link to={`/edit/${item.id}`}>
+                                    <Button variant="primary">Editar</Button>
+                                    </Link>
+                                    <Button onClick={() => DeleteFunction(item.id)} variant="danger" style={{ marginLeft: "10px" }}>Excluir</Button>
                                     </td>
                                 </tr>
                             ))
